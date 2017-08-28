@@ -7,3 +7,8 @@ This repo is used for experiments about `moiré effect <https://en.wikipedia.org
 ----------------
 First tentative with naive code (WORKS)
 Two linear gratings with different frequency create a 3rd linear frequency
+
+2_round
+-------
+Not expected but interesting result
+Two almost linear gratings create circular pattern
