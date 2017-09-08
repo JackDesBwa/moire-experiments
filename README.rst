@@ -12,3 +12,8 @@ Two linear gratings with different frequency create a 3rd linear frequency
 -------
 Not expected but interesting result
 Two almost linear gratings create circular pattern
+
+3_cross_circle
+--------------
+Circular grating with a cross emerging pattern
+Result of try and errors with equations
