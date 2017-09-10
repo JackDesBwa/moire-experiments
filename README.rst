@@ -17,3 +17,8 @@ Two almost linear gratings create circular pattern
 --------------
 Circular grating with a cross emerging pattern
 Result of try and errors with equations
+
+4_spiral
+--------
+Circular gratings with spiral emerging pattern
+Result of try and errors with equations
