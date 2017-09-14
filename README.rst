@@ -3,6 +3,13 @@ Moiré experiments
 
 This repo is used for experiments about `moiré effect <https://en.wikipedia.org/wiki/Moir%C3%A9_pattern>`_. It will be a collection of test scripts, not a fancy finished software.
 
+interactive.qml
+---------------
+This is a simple shader/qml script (Qt5 library) to display computed images in interactive way
+Launch with *qmlscene interactive.qml*
+It assumes graptings are saved as /tmp/i1.png and /tmp/i2.png
+Move with button1 and turn with button2 of the mouse
+
 1_simple_initial
 ----------------
 First tentative with naive code (WORKS)
