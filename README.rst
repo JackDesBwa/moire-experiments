@@ -22,3 +22,8 @@ Result of try and errors with equations
 --------
 Circular gratings with spiral emerging pattern
 Result of try and errors with equations
+
+5_pseudoinv
+-----------
+Use maths to 'invert' phase and have approximative rendered pattern computed
+Need work to have better results
