@@ -34,3 +34,7 @@ Result of try and errors with equations
 -----------
 Use maths to 'invert' phase and have approximative rendered pattern computed
 Need work to have better results
+
+6_pseudoinv_color
+-----------------
+Generate two gratings that overlaps into a colored image
