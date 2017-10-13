@@ -12,8 +12,8 @@ def bars_phase(angle_deg):
     return lambda x, y: x + a * y
 
 def create_grating(size, shape, phase):
-    npimg = np.indices((size[1],  size[0]), dtype='d')[1]
-    for y in range(size[1]):
+    npimg = np.indices((size[0],  size[1]), dtype='d')[1]
+    for y in range(size[0]):
         npimg[y] = shape(phase(npimg[y], y))
     return Image.fromarray(np.uint8(npimg*255))
 
