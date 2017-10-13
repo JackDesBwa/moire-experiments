@@ -12,12 +12,14 @@ def phase(f, b, a):
         return o
     return ph
 
-size = (300, 300)
-
 f_file = '5_pattern.png'
 if len(sys.argv) > 1:
     f_file = sys.argv[1]
-f = np.array(tuple(i[0] for i in Image.open(f_file).getdata()), dtype=np.uint8).reshape(size)
+
+image = Image.open(f_file);
+size = (image.size[1], image.size[0])
+
+f = np.array(tuple(i[0] for i in image.getdata()), dtype=np.uint8).reshape(size)
 
 b = None
 if len(sys.argv) > 2:

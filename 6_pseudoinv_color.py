@@ -10,14 +10,16 @@ def phase(f, a):
         return o
     return ph
 
-size = (300, 300)
-
-img = [0,0,0]
 f_file = '6_pattern.png'
 if len(sys.argv) > 1:
     f_file = sys.argv[1]
+
+image = Image.open(f_file);
+size = (image.size[1], image.size[0])
+
+img = [0,0,0]
 for chan in range(3):
-    f = np.array(tuple(i[chan] for i in Image.open(f_file).getdata()), dtype=np.uint8).reshape(size)
+    f = np.array(tuple(i[chan] for i in image.getdata()), dtype=np.uint8).reshape(size)
 
     img1 = create_grating(size, cos_shape(90), phase(f, +0.5))
     img2 = create_grating(size, cos_shape(90), phase(f, -0.5))
