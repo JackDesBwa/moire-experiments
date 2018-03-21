@@ -41,10 +41,12 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.RightButton
-            onMouseXChanged: {
+            onPositionChanged: {
                 if (pressedButtons & Qt.LeftButton) {
-                    parent.dx = Math.abs(mouse.x-width/2) / 5;
-                    parent.dy = Math.abs(mouse.y-height/2) / 5;
+                    if (!(mouse.modifiers & Qt.ShiftModifier))
+                        parent.dx = Math.abs(mouse.x-width/2) / 5;
+                    if (!(mouse.modifiers & Qt.ControlModifier))
+                        parent.dy = Math.abs(mouse.y-height/2) / 5;
                 } else {
                     parent.angle = Math.atan2(mouse.y-height/2, mouse.x-width/2)*180/Math.PI;
                 }
