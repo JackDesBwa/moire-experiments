@@ -30,12 +30,16 @@ First tentative with naive code (WORKS)
 
 Two linear gratings with different frequency create a 3rd linear frequency
 
+.. image:: results/1.png
+
 2_round
 -------
 
 Not expected but interesting result
 
 Two almost linear gratings create circular pattern
+
+.. image:: results/2.png
 
 3_cross_circle
 --------------
@@ -44,12 +48,16 @@ Circular grating with a cross emerging pattern
 
 Result of try and errors with equations
 
+.. image:: results/3.png
+
 4_spiral
 --------
 
 Circular gratings with spiral emerging pattern
 
 Result of try and errors with equations
+
+.. image:: results/4.png
 
 5_pseudoinv
 -----------
@@ -58,7 +66,11 @@ Use maths to 'invert' phase and have approximative rendered pattern computed
 
 Need work to have better results
 
+.. image:: results/5.png
+
 6_pseudoinv_color
 -----------------
 
 Generate two gratings that overlaps into a colored image
+
+.. image:: results/6.png
