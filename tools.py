@@ -17,13 +17,23 @@ def create_grating(size, shape, phase):
         npimg[y] = shape(phase(npimg[y], y))
     return Image.fromarray(np.uint8(npimg*255))
 
-def merge_gratings(gratings):
-    n = len(gratings)
-    size = gratings[0].size
-    img = Image.new('L', (size[0], (n+1)*size[1]+n*10), 255)
-    moire = Image.new('L', size, 255)
-    for i, g in enumerate(gratings):
-        img.paste(g, (0, i*(size[1]+10)))
-        moire = multiply(moire, g)
-    img.paste(moire, (0, n*(size[1]+10)))
+def merge_gratings(gratings, vert=False):
+    if vert:
+        n = len(gratings)
+        size = gratings[0].size
+        img = Image.new('L', (size[0], (n+1)*size[1]+n*10), 255)
+        moire = Image.new('L', size, 255)
+        for i, g in enumerate(gratings):
+            img.paste(g, (0, i*(size[1]+10)))
+            moire = multiply(moire, g)
+        img.paste(moire, (0, n*(size[1]+10)))
+    else:
+        n = len(gratings)
+        size = gratings[0].size
+        img = Image.new('L', ((n+1)*size[0]+n*10, size[1]), 255)
+        moire = Image.new('L', size, 255)
+        for i, g in enumerate(gratings):
+            img.paste(g, (i*(size[0]+10), 0))
+            moire = multiply(moire, g)
+        img.paste(moire, (n*(size[0]+10), 0))
     return img
