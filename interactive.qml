@@ -34,6 +34,10 @@ Rectangle {
         property variant source1: src1
         property variant source2: src2
 
+        property real x0: 0
+        property real y0: 0
+        property real dx0: 0
+        property real dy0: 0
         property real dx: 0
         property real dy: 0
         property real angle: 0
@@ -41,12 +45,22 @@ Rectangle {
         MouseArea {
             anchors.fill: parent
             acceptedButtons: Qt.LeftButton | Qt.RightButton
+            onPressed: {
+                parent.x0 = mouse.x
+                parent.y0 = mouse.y
+                parent.dx0 = parent.dx
+                parent.dy0 = parent.dy
+            }
             onPositionChanged: {
                 if (pressedButtons & Qt.LeftButton) {
-                    if (!(mouse.modifiers & Qt.ShiftModifier))
-                        parent.dx = Math.abs(mouse.x-width/2) / 5;
-                    if (!(mouse.modifiers & Qt.ControlModifier))
-                        parent.dy = Math.abs(mouse.y-height/2) / 5;
+                    if (mouse.modifiers & Qt.AltModifier) {
+                        parent.angle = Math.atan2(mouse.y-height/2, mouse.x-width/2)*180/Math.PI;
+                    } else {
+                        if (!(mouse.modifiers & Qt.ShiftModifier))
+                            parent.dx = parent.dx0 + (mouse.x - parent.x0);
+                        if (!(mouse.modifiers & Qt.ControlModifier))
+                            parent.dy = parent.dy0 + (mouse.y - parent.y0);
+                    }
                 } else {
                     parent.angle = Math.atan2(mouse.y-height/2, mouse.x-width/2)*180/Math.PI;
                 }
