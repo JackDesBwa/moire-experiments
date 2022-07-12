@@ -27,7 +27,7 @@ scripts do not save such images).
 1_simple_initial
 ----------------
 
-First tentative with naive code (WORKS)
+First tentative with naive code
 
 Two linear gratings with different frequency create a 3rd linear frequency
 
