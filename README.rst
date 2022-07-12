@@ -18,7 +18,8 @@ Launch with *qmlscene interactive.qml*
 It assumes gratings are saved as /tmp/i1.png and /tmp/i2.png (note: other
 scripts do not save such images).
 
-* Left drag to move image (Ctrl to constrain X, Shift to constrain Y)
+* Left drag to move image (Ctrl to constrain X, Shift to constrain Y, Alt to
+  rotate)
 * Right drag to rotate image
 * Double left click to reset position
 * Double right click to reset rotation
