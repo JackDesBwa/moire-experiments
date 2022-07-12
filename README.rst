@@ -75,3 +75,10 @@ Need work to have better results
 Generate two gratings that overlaps into a colored image
 
 .. image:: results/6.png
+
+7_pixel_grid
+------------
+
+Generate two gratings that form a (binary) pixel grid
+
+.. image:: results/7.png
