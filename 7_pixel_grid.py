@@ -16,6 +16,7 @@ imgsize = (msg.size[1]*pw, msg.size[0]*pw)
 np.random.seed(0)
 msg = np.array(msg.getdata(), dtype=np.uint8).reshape(msgsize)/255
 angles = np.random.random(msgsize)*np.pi
+phases = np.random.random(msgsize)*2*np.pi
 
 def phase(en):
     def ph(x, y):
@@ -23,9 +24,10 @@ def phase(en):
         x01 = (x % pw) / pw
         y01 = (y % pw) / pw
         a = angles[ym,:].repeat(pw)
+        p = phases[ym,:].repeat(pw)
         m = msg[ym,:].repeat(pw)
         o = (x01*np.sin(a)+y01*np.cos(a))
-        o += en*m/2/freq
+        o += en*m/2/freq+p
         return o
     return ph
 
