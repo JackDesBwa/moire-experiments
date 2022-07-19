@@ -2,7 +2,6 @@
 
 import numpy as np
 from PIL import Image
-from PIL.ImageChops import multiply
 
 def cos_shape(freq):
     return lambda x: 0.5+np.cos(2*np.pi*freq*x)/2
@@ -16,28 +15,23 @@ def create_grating(size, shape, phase):
     npimg = np.indices((size[0],  size[1]), dtype='d')[1]
     for y in range(size[0]):
         npimg[y] = shape(phase(npimg[y], y))
-    return Image.fromarray(np.uint8(npimg*255))
+    return npimg
 
 def merge_gratings(gratings, vert=False):
-    if vert:
-        n = len(gratings)
-        size = gratings[0].size
-        img = Image.new('L', (size[0], (n+1)*size[1]+n*10), 255)
-        moire = Image.new('L', size, 255)
-        for i, g in enumerate(gratings):
-            img.paste(g, (0, i*(size[1]+10)))
-            moire = multiply(moire, g)
-        img.paste(moire, (0, n*(size[1]+10)))
-    else:
-        n = len(gratings)
-        size = gratings[0].size
-        img = Image.new('L', ((n+1)*size[0]+n*10, size[1]), 255)
-        moire = Image.new('L', size, 255)
-        for i, g in enumerate(gratings):
-            img.paste(g, (i*(size[0]+10), 0))
-            moire = multiply(moire, g)
-        img.paste(moire, (n*(size[0]+10), 0))
-    return img
+    imgs = []
+    spacer = np.ones((10 if vert else gratings[0].shape[0], gratings[0].shape[1] if vert else 10))
+    moire = np.ones(gratings[0].shape, dtype=np.double)
+    for g in gratings:
+        moire *= g
+        imgs.append(g)
+        imgs.append(spacer)
+    imgs.append(moire)
+
+    ax = 0 if vert else 1
+    return np.concatenate(imgs, axis=ax)
+
+def np2pil(img):
+    return Image.fromarray(np.uint8(img*255))
 
 def hexgrid(size, f):
     img = np.indices(size, dtype='d')[1]/size[1]
