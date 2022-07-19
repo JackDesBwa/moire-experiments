@@ -82,3 +82,10 @@ Generate two gratings that overlaps into a colored image
 Generate two gratings that form a (binary) pixel grid
 
 .. image:: results/7.png
+
+8_trihex
+--------
+
+Generate an image subdivided in 3 hexagonal shaped regions which generate a different pattern depending on the angle of the superposition
+
+.. image:: results/8.png
