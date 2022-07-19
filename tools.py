@@ -37,3 +37,45 @@ def merge_gratings(gratings, vert=False):
             moire = multiply(moire, g)
         img.paste(moire, (n*(size[0]+10), 0))
     return img
+
+def hexgrid(size, f):
+    img = np.indices(size, dtype='d')[1]/size[1]
+    res = np.zeros((*size, 3))
+
+    for yi in range(img.shape[0]):
+        x = img[yi,:]
+        y = yi/size[1] # In same scale as x
+
+        sz = np.sqrt(3)/f/3
+        qf = (np.sqrt(3)/3 * x  -  1/3 * y) / sz
+        rf = y * 2/3 / sz
+        sf = -qf-rf
+
+        q = np.round(qf)
+        r = np.round(rf)
+        s = np.round(sf)
+
+        qd = np.abs(q - qf)
+        rd = np.abs(r - rf)
+        sd = np.abs(s - sf)
+
+        qm = (qd > rd) * (qd > sd)
+        q = q * (1 - qm) + (-r-s) * qm
+        rm = (1 - qm) * (rd > sd)
+        r = r * (1 - rm) + (-q-s) * rm
+        sm = (1 - rm)
+        s = s * (1 - sm) + (-q-r) * sm
+
+        res[yi, :, 0] = q
+        res[yi, :, 1] = r
+        res[yi, :, 2] = s
+
+    return res
+
+def trihexgrid(size, f):
+    hexs = hexgrid(size, f)
+    return (hexs[:,:,0]-hexs[:,:,1])%3
+
+def quadhexgrid(size, f):
+    hexs = hexgrid(size, f)
+    return (hexs[:,:,0]+hexs[:,:,1]*2)%4
