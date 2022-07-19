@@ -8,8 +8,9 @@ def cos_shape(freq):
     return lambda x: 0.5+np.cos(2*np.pi*freq*x)/2
 
 def bars_phase(angle_deg):
-    a = np.sin(angle_deg/180*np.pi)
-    return lambda x, y: x + a * y
+    s = np.sin(angle_deg/180*np.pi)
+    c = np.cos(angle_deg/180*np.pi)
+    return lambda x, y: c * x + s * y
 
 def create_grating(size, shape, phase):
     npimg = np.indices((size[0],  size[1]), dtype='d')[1]
