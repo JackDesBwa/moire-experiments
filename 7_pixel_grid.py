@@ -35,4 +35,4 @@ img1 = create_grating(imgsize, cos_shape(freq), phase(False))
 img2 = create_grating(imgsize, cos_shape(freq), phase(True))
 
 img = merge_gratings((img1, img2), True)
-np2pil(img).show()
+imshow(img)

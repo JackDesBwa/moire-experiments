@@ -43,4 +43,4 @@ res = np.concatenate(allimgs, axis=0)
 res[0:size[0], 0:size[1]] = 1
 res[size[0]*2+20:, 0:size[1]] = 1
 
-np2pil(res).show()
+imshow(res)

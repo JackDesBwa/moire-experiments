@@ -1,7 +1,22 @@
 #!/usr/bin/env python3
 
 import numpy as np
+import matplotlib.pyplot as plt
 from PIL import Image
+
+def imshow(imgs, vertical=False, cmap='gray'):
+    if type(imgs) is np.ndarray: imgs = (imgs, )
+    if vertical is False: vertical = (1, len(imgs))
+    if vertical is True: vertical = (len(imgs), 1)
+    if len(imgs) == 0: return
+
+    ax1 = plt.subplot(vertical[0], vertical[1], 1)
+    ax1.imshow(imgs[0], cmap=cmap)
+    for i, img in enumerate(imgs[1:], 2):
+        ax2 = plt.subplot(vertical[0], vertical[1], i, sharex=ax1, sharey=ax1)
+        ax2.imshow(img, cmap=cmap)
+    plt.tight_layout()
+    plt.show()
 
 def cos_shape(freq):
     return lambda x: 0.5+np.cos(2*np.pi*freq*x)/2

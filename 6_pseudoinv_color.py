@@ -27,4 +27,4 @@ for chan in range(3):
     img[chan] = merge_gratings((img1, img2))
 
 img = np.stack(img, axis=2)
-np2pil(img).show()
+imshow(img)
