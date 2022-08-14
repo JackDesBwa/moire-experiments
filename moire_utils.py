@@ -10,11 +10,14 @@ def imshow(imgs, vertical=False, cmap='gray'):
     if vertical is True: vertical = (len(imgs), 1)
     if len(imgs) == 0: return
 
-    ax1 = plt.subplot(vertical[0], vertical[1], 1)
-    ax1.imshow(imgs[0], cmap=cmap)
-    for i, img in enumerate(imgs[1:], 2):
-        ax2 = plt.subplot(vertical[0], vertical[1], i, sharex=ax1, sharey=ax1)
-        ax2.imshow(img, cmap=cmap)
+    ax1 = None
+    for i, img in enumerate(imgs, 1):
+        if not img is None:
+            if ax1 is None:
+                ax1 = ax2 = plt.subplot(vertical[0], vertical[1], i)
+            else:
+                ax2 = plt.subplot(vertical[0], vertical[1], i, sharex=ax1, sharey=ax1)
+            ax2.imshow(img, cmap=cmap)
     plt.tight_layout()
     plt.show()
 
