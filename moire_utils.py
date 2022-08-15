@@ -21,29 +21,37 @@ def imshow(imgs, vertical=False, cmap='gray'):
     plt.tight_layout()
     plt.show()
 
-def cos_shape(freq):
-    return lambda x: 0.5+np.cos(2*np.pi*freq*x)/2
+def gen_uv(size):
+    y, x = np.indices(size, dtype=np.double)
+    y /= size[0]
+    x /= size[1]
+    return x, y
 
-def bars_phase(angle_deg):
-    s = np.sin(angle_deg/180*np.pi)
-    c = np.cos(angle_deg/180*np.pi)
-    return lambda x, y: c * x + s * y
+def wave_cos():
+    return lambda x: 0.5 + np.cos(2*np.pi*x)/2
 
-def create_grating(size, shape, phase):
-    npimg = np.indices((size[0],  size[1]), dtype='d')[1]
-    for y in range(size[0]):
-        npimg[y] = shape(phase(npimg[y], y))
-    return npimg
+def phaser_linear(angle_deg, ratio=1):
+    angle_rad = np.arctan(np.tan(angle_deg * np.pi / 180) / ratio)
+    s = np.sin(angle_rad)
+    c = np.cos(angle_rad)
+    return lambda x, y: (c * x + s * y, 0)
 
-def merge_gratings(gratings, vert=False):
+def grating(size, freq, wave, phaser):
+    x, y = gen_uv(size)
+    o, p = phaser(x, y)
+    return wave((freq*o+p)%1)
+
+def merge(gratings, vert=False, add_moire=True):
     imgs = []
     spacer = np.ones((10 if vert else gratings[0].shape[0], gratings[0].shape[1] if vert else 10))
+    if len(gratings[0].shape) == 3: spacer = np.stack((spacer, spacer, spacer), axis=2)
     moire = np.ones(gratings[0].shape, dtype=np.double)
     for g in gratings:
         moire *= g
         imgs.append(g)
         imgs.append(spacer)
-    imgs.append(moire)
+    if add_moire:
+        imgs.append(moire)
 
     ax = 0 if vert else 1
     return np.concatenate(imgs, axis=ax)

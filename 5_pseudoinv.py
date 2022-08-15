@@ -1,32 +1,27 @@
 #!/usr/bin/env python3
 
 import sys
-from tools import *
+from moire_utils import *
 
-def phase(f, b, a):
+def phaser(f, b, a, en):
+    s = np.sin(a/180*np.pi)
+    c = np.cos(a/180*np.pi)
     def ph(x, y):
-        o = (x+1.4*y)/300
-        o += a * np.arccos((f[y]/255.0*2)-1)/250
-        if b is not None:
-            o += (np.arccos((b[y]/255.0*2)-1))/80
-        return o
+        o = c*x+s*y
+        p = en/2 * np.arccos(2*f-1)/(2*np.pi)
+        p += 0 if b is None else 2*((np.arccos(2*b-1))/(2*np.pi))
+        return o, p
     return ph
 
 f_file = '5_pattern.png'
 if len(sys.argv) > 1:
     f_file = sys.argv[1]
 
-image = Image.open(f_file);
-size = (image.size[1], image.size[0])
+f = np.array(Image.open(f_file).convert('L'), dtype=np.double)/255
+b = np.array(Image.open(sys.argv[2]).convert('L'), dtype=np.double)/255 if len(sys.argv) > 2 else None
+size = f.shape
 
-f = np.array(tuple(i[0] for i in image.getdata()), dtype=np.uint8).reshape(size)
+img1 = grating(size, 60, wave_cos(), phaser(f, b, 45, -1))
+img2 = grating(size, 60, wave_cos(), phaser(f, b, 45, +1))
 
-b = None
-if len(sys.argv) > 2:
-    b = np.array(tuple(i[0] for i in Image.open(sys.argv[2]).getdata()), dtype=np.uint8).reshape(size)
-
-img1 = create_grating(size, cos_shape(20), phase(f, b, -1))
-img2 = create_grating(size, cos_shape(20), phase(f, b, +1))
-
-img = merge_gratings((img1, img2))
-imshow(img)
+imshow((img1, img2, img1*img2))

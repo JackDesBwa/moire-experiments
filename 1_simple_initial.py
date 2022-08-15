@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
-from tools import *
+from moire_utils import *
 
 size = (50, 800)
-img1 = create_grating(size, cos_shape(0.10), bars_phase(-2))
-img2 = create_grating(size, cos_shape(0.12), bars_phase(2))
-img = merge_gratings((img1, img2), True)
-imshow(img)
+ratio = size[1]/size[0]
+img1 = grating(size, 80, wave_cos(), phaser_linear(-2, ratio))
+img2 = grating(size, 96, wave_cos(), phaser_linear(2, ratio))
+imshow((img1, img2, img1*img2), True)

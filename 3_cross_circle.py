@@ -1,27 +1,24 @@
 #!/usr/bin/env python3
 
-from tools import *
+from moire_utils import *
 
-def phase(a):
+def phaser(en):
     def ph(x, y):
-        h = 150
-        x -= h
-        y -= h
-        o = (np.arctan2(x, y)/np.pi+1)/2*np.pi
-        q = 100
-        oo = a/10
-        oo *= ((x-q)**2+y**2)/h**2
-        oo *= ((x+q)**2+y**2)/h**2
-        oo *= (x**2+(y-q)**2)/h**2
-        oo *= (x**2+(y+q)**2)/h**2
-        o += oo
-        j = x**2+y**2 > 40**2
-        k = x**2+y**2 < h**2
-        return j*o*k
+        x -= 0.5
+        y -= 0.5
+        w = x**2+y**2
+        e = (w > 0.0178) * (w < 0.25)
+        o = (np.arctan2(x, y)/np.pi+1)/2
+        p = 1
+        p *= ((x-1/3)**2+y**2)*5
+        p *= ((x+1/3)**2+y**2)*5
+        p *= (x**2+(y-1/3)**2)*5
+        p *= (x**2+(y+1/3)**2)*5
+
+        return o*e, p*e*en
     return ph
 
 size = (300, 300)
-img1 = create_grating(size, cos_shape(80/np.pi), phase(-1))
-img2 = create_grating(size, cos_shape(80/np.pi), phase(+1))
-img = merge_gratings((img1, img2))
-imshow(img)
+img1 = grating(size, 80, wave_cos(), phaser(-1))
+img2 = grating(size, 80, wave_cos(), phaser(1))
+imshow((img1, img2, img1*img2))

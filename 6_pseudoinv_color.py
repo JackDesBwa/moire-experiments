@@ -1,30 +1,31 @@
 #!/usr/bin/env python3
 
 import sys
-from tools import *
+from moire_utils import *
 
-def phase(f, a):
+def phaser(f, a, en):
+    s = np.sin(a/180*np.pi)
+    c = np.cos(a/180*np.pi)
     def ph(x, y):
-        o = (x+1.4*y)/300
-        o += a * (np.arccos((f[y]/255.0*2)-1)/np.pi+1)/2/200
-        return o
+        o = c*x+s*y
+        p = en/2 * np.arccos(2*f-1)/(2*np.pi)
+        return o, p
     return ph
 
 f_file = '6_pattern.png'
 if len(sys.argv) > 1:
     f_file = sys.argv[1]
 
-image = Image.open(f_file);
-size = (image.size[1], image.size[0])
+image = np.array(Image.open(f_file), dtype=np.double)/255
+size = image.shape[:2]
+fq = 80
 
-img = [0,0,0]
-for chan in range(3):
-    f = np.array(tuple(i[chan] for i in image.getdata()), dtype=np.uint8).reshape(size)
+img1 = np.stack([
+    grating(size, fq, wave_cos(), phaser(image[...,chan], 60, -1)) for chan in range(3)
+], axis=2)
 
-    img1 = create_grating(size, cos_shape(90), phase(f, +0.5))
-    img2 = create_grating(size, cos_shape(90), phase(f, -0.5))
+img2 = np.stack([
+    grating(size, fq, wave_cos(), phaser(image[...,chan], 60, +1)) for chan in range(3)
+], axis=2)
 
-    img[chan] = merge_gratings((img1, img2))
-
-img = np.stack(img, axis=2)
-imshow(img)
+imshow((img1, img2, img1*img2))

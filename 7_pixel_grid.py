@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-from tools import *
+from moire_utils import *
 
 f_msg = '7_msg.pbm'
 if len(sys.argv) > 1:
@@ -15,24 +15,21 @@ imgsize = (msg.size[1]*pw, msg.size[0]*pw)
 
 np.random.seed(0)
 msg = np.array(msg.getdata(), dtype=np.uint8).reshape(msgsize)/255
+msg = msg.repeat(pw, axis=0).repeat(pw, axis=1)
 angles = np.random.random(msgsize)*np.pi
+angles = angles.repeat(pw, axis=0).repeat(pw, axis=1)
 phases = np.random.random(msgsize)*2*np.pi
+phases = phases.repeat(pw, axis=0).repeat(pw, axis=1)
 
-def phase(en):
+def phaser(size, en):
     def ph(x, y):
-        ym = y//pw
-        x01 = (x % pw) / pw
-        y01 = (y % pw) / pw
-        a = angles[ym,:].repeat(pw)
-        p = phases[ym,:].repeat(pw)
-        m = msg[ym,:].repeat(pw)
-        o = (x01*np.sin(a)+y01*np.cos(a))
-        o += en*m/2/freq+p
-        return o
+        xs = (x % (pw/size[1])) * size[1]/ pw
+        ys = (y % (pw/size[0])) * size[0]/ pw
+        p = phases + en * msg * 0.5
+        o = xs * np.sin(angles) + ys * np.cos(angles)
+        return o, p
     return ph
 
-img1 = create_grating(imgsize, cos_shape(freq), phase(False))
-img2 = create_grating(imgsize, cos_shape(freq), phase(True))
-
-img = merge_gratings((img1, img2), True)
-imshow(img)
+img1 = grating(imgsize, freq, wave_cos(), phaser(imgsize, False))
+img2 = grating(imgsize, freq, wave_cos(), phaser(imgsize, True))
+imshow((img1, img2, img1*img2), True)

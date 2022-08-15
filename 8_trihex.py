@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import sys
-from tools import *
+from moire_utils import *
 
 f_files = ['8_1.png', '8_2.png', '8_3.png']
 if len(sys.argv) > 3:
@@ -17,30 +17,21 @@ for f in fs:
         print('Image sizes do not match')
         exit(1)
 
-def phase(f, a, en):
+def phaser(f, a, en):
     s = np.sin(a/180*np.pi)
     c = np.cos(a/180*np.pi)
-    def ph(xi, yi):
-        x = xi/size[1]
-        y = yi/size[0]
+    def ph(x, y):
         o = c*x+s*y
-        o += en * np.arccos(f[yi])/2/fq/np.pi
-        return o
+        p = en * np.arccos(f)/np.pi/2
+        return o, p
     return ph
 
 thg = trihexgrid(size, fq/2)
-img = np.zeros(size, dtype=np.double)
-for i, f in enumerate(fs):
-    img += create_grating(size, cos_shape(fq), phase(f, angles[i], 1))*(thg==i)
+img1 = np.sum([grating(size, fq, wave_cos(), phaser(fs[i], a, 1))*(thg==i) for i, a in enumerate(angles)], axis=0)
+revealers = [grating(size, fq, wave_cos(), phaser(f, a, 0)) for a in angles]
 
-allimgs = []
-for i in range(3):
-    img2 = create_grating(size, cos_shape(fq), phase(f, angles[i], 0))
-    allimgs.append(merge_gratings((img, img2)))
-    allimgs.append(np.ones((10, size[1]*3+20)))
-
-res = np.concatenate(allimgs, axis=0)
-res[0:size[0], 0:size[1]] = 1
-res[size[0]*2+20:, 0:size[1]] = 1
-
-imshow(res)
+imshow((
+    None, revealers[0], revealers[0]*img1,
+    img1, revealers[1], revealers[1]*img1,
+    None, revealers[2], revealers[2]*img1,
+), (3, 3))
